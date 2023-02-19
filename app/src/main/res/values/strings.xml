@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">floatify-android</string>
+
+    <string name="yandex_ocr_url">https://translate.yandex.net/</string>
+    <string name="yandex_translate_url">https://translate.yandex.net/</string>
 </resources>
