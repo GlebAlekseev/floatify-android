@@ -1,10 +1,10 @@
-package com.glebalekseevjk.floatify_android.data.preferences
+package com.glebalekseevjk.floatify_android.data.temporary
 
 import android.content.Context
 import android.content.SharedPreferences
 import javax.inject.Inject
 
-open class SharedPreferencesTemporaryStorage @Inject constructor(private val context: Context) {
+class SharedPreferencesTemporaryStorage @Inject constructor(private val context: Context) {
     private val temporaryPref: SharedPreferences =
         context.getSharedPreferences(PREF_PACKAGE_NAME, Context.MODE_PRIVATE)
 
@@ -12,7 +12,7 @@ open class SharedPreferencesTemporaryStorage @Inject constructor(private val con
         return temporaryPref.getString(PREF_KEY_YANDEX_TRANSLATE_SESSION_ID, null)
     }
 
-    fun setYandexTranslateSessionId(sessionId: String) {
+    fun setYandexTranslateSessionId(sessionId: String?) {
         temporaryPref.edit().putString(PREF_KEY_YANDEX_TRANSLATE_SESSION_ID, sessionId).apply()
     }
 
