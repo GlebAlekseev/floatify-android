@@ -1,7 +1,6 @@
-package com.glebalekseevjk.floatify_android.data.remote.yandex_ocr
+package com.glebalekseevjk.floatify_android.data.yandex_ocr
 
-import com.glebalekseevjk.floatify_android.data.remote.yandex_ocr.dto.YandexOCRResponse
-import okhttp3.MediaType
+import com.glebalekseevjk.floatify_android.data.yandex_ocr.dto.YandexOCRResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
