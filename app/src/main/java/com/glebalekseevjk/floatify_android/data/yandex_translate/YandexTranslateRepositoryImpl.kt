@@ -1,12 +1,12 @@
-package com.glebalekseevjk.floatify_android.data.repository
+package com.glebalekseevjk.floatify_android.data.yandex_translate
 
-import com.glebalekseevjk.floatify_android.data.remote.yandex_translate.YandexTranslateService
-import com.glebalekseevjk.floatify_android.data.remote.yandex_translate.dto.YandexTranslateResponse
+import com.glebalekseevjk.floatify_android.data.yandex_translate.dto.YandexTranslateResponse
 import com.glebalekseevjk.floatify_android.domain.entity.Resource
 import com.glebalekseevjk.floatify_android.domain.entity.translate.TranslateLang
+import com.glebalekseevjk.floatify_android.domain.exception.ExpiredSessionException
 import com.glebalekseevjk.floatify_android.domain.repository.TranslateRepository
 import kotlinx.coroutines.Dispatchers
-import retrofit2.HttpException
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -16,8 +16,10 @@ class YandexTranslateRepositoryImpl @Inject constructor(
     override suspend fun translateText(
         textList: List<String>,
         sourceLang: TranslateLang,
-        targetLang: TranslateLang
-    ): Resource<List<String>> = with(Dispatchers.IO) {
+        targetLang: TranslateLang,
+        sessionId: String
+    ): Resource<List<String>> = withContext(Dispatchers.IO) {
+        if (textList.isEmpty()) return@withContext Resource.Success(emptyList<String>())
         val options = YandexTranslateService.baseOptions.toMutableMap()
         options["source_lang"] = when (sourceLang) {
             TranslateLang.EN -> "en"
@@ -27,19 +29,20 @@ class YandexTranslateRepositoryImpl @Inject constructor(
             TranslateLang.EN -> "en"
             TranslateLang.RU -> "ru"
         }
+        options["id"] = sessionId
         val response = yandexTranslateService.translateText(options, *textList.toTypedArray())
-        return@with getResourceFromYandexTranslateResponse(response)
+        getResourceFromYandexTranslateResponse(response)
     }
 
     private fun getResourceFromYandexTranslateResponse(response: Response<YandexTranslateResponse>): Resource<List<String>> {
         response.code().let {
             when (it) {
                 200 -> {}
-                else -> return Resource.Failure<Nothing>(HttpException(response))
+                403 -> return Resource.Failure<Nothing>(ExpiredSessionException())
+                else -> return Resource.Failure<Nothing>(Exception())
             }
         }
-        val body = response.body()
-            ?: return Resource.Failure<Nothing>(NullPointerException("response.body is null"))
+        val body = response.body()!!
         return Resource.Success(body.text)
     }
 }

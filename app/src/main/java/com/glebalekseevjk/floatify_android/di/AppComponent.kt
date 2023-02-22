@@ -15,6 +15,7 @@ import dagger.Component
 interface AppComponent {
     fun injectMainApplication(application: MainApplication)
     fun createMainActivitySubcomponent(): MainActivitySubcomponent
+    fun createYandexSessionWebViewActivitySubcomponent(): YandexSessionWebViewActivitySubcomponent
 
     @Component.Factory
     interface Builder {
