@@ -13,8 +13,19 @@ class TranslateUseCase @Inject constructor(
     private val temporaryRepository: TemporaryRepository,
     private val yandexSessionRepository: YandexSessionRepository
 ) {
-    // TODO stack overflow if always http 403 - fix
     suspend fun translateText(
+        textList: List<String>,
+        sourceLang: TranslateLang,
+        targetLang: TranslateLang
+    ): Resource<List<String>> {
+        val result = getSessionAndTranslateText(textList, sourceLang, targetLang)
+        return if (result is Resource.Failure && result.throwable is ExpiredSessionException) {
+            temporaryRepository.setYandexTranslateSessionId(null)
+            getSessionAndTranslateText(textList, sourceLang, targetLang)
+        } else result
+    }
+
+    private suspend fun getSessionAndTranslateText(
         textList: List<String>,
         sourceLang: TranslateLang,
         targetLang: TranslateLang
@@ -25,18 +36,6 @@ class TranslateUseCase @Inject constructor(
                     RuntimeException()
                 ) else temporaryRepository.setYandexTranslateSessionId(it)
             }!!
-        val result = translateRepository.translateText(textList, sourceLang, targetLang, sessionId)
-        return when (result) {
-            is Resource.Failure -> {
-                when (result.throwable) {
-                    is ExpiredSessionException -> {
-                        temporaryRepository.setYandexTranslateSessionId(null)
-                        translateText(textList, sourceLang, targetLang)
-                    }
-                    else -> result
-                }
-            }
-            is Resource.Success -> result
-        }
+        return translateRepository.translateText(textList, sourceLang, targetLang, sessionId)
     }
 }
