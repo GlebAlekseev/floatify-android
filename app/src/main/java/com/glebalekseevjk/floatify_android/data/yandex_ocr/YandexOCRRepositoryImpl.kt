@@ -21,7 +21,7 @@ class YandexOCRRepositoryImpl @Inject constructor(
         imageFile: File,
         recognizedLang: OCRLang
     ): Resource<String> = withContext(Dispatchers.IO) {
-        if (imageFile.extension != "jpeg") throw RuntimeException("Invalid file type: ${imageFile.extension}. Must be jpeg")
+        if (imageFile.extension != "jpg") throw RuntimeException("Invalid file type: ${imageFile.extension}. Must be jpg")
         val options = YandexOCRService.baseOptions.toMutableMap()
         options["lang"] = when (recognizedLang) {
             OCRLang.ANY -> "*"

@@ -8,7 +8,6 @@ interface TranslateRepository {
     suspend fun translateText(
         textList: List<String>,
         sourceLang: TranslateLang,
-        targetLang: TranslateLang,
-        sessionId: String
+        targetLang: TranslateLang
     ): Resource<List<String>>
 }
