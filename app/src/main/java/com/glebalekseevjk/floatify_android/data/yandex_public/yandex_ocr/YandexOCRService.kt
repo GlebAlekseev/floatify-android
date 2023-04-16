@@ -1,6 +1,6 @@
-package com.glebalekseevjk.floatify_android.data.yandex_ocr
+package com.glebalekseevjk.floatify_android.data.yandex_public.yandex_ocr
 
-import com.glebalekseevjk.floatify_android.data.yandex_ocr.dto.YandexOCRResponse
+import com.glebalekseevjk.floatify_android.data.yandex_public.yandex_ocr.dto.YandexOCRResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*

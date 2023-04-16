@@ -1,6 +1,6 @@
-package com.glebalekseevjk.floatify_android.data.yandex_translate
+package com.glebalekseevjk.floatify_android.data.yandex_public.yandex_translate
 
-import com.glebalekseevjk.floatify_android.data.yandex_translate.dto.YandexTranslateResponse
+import com.glebalekseevjk.floatify_android.data.yandex_public.yandex_translate.dto.YandexTranslateResponse
 import retrofit2.Response
 import retrofit2.http.*
 

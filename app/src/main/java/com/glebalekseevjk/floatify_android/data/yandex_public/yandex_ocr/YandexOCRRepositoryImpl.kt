@@ -1,6 +1,6 @@
-package com.glebalekseevjk.floatify_android.data.yandex_ocr
+package com.glebalekseevjk.floatify_android.data.yandex_public.yandex_ocr
 
-import com.glebalekseevjk.floatify_android.data.yandex_ocr.dto.YandexOCRResponse
+import com.glebalekseevjk.floatify_android.data.yandex_public.yandex_ocr.dto.YandexOCRResponse
 import com.glebalekseevjk.floatify_android.domain.entity.Resource
 import com.glebalekseevjk.floatify_android.domain.entity.ocr.OCRLang
 import com.glebalekseevjk.floatify_android.domain.repository.OCRRepository

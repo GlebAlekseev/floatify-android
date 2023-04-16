@@ -1,4 +1,4 @@
-package com.glebalekseevjk.floatify_android.data.yandex_session
+package com.glebalekseevjk.floatify_android.data.yandex_public.yandex_session
 
 import android.content.Context
 import android.content.Intent

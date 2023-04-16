@@ -1,4 +1,4 @@
-package com.glebalekseevjk.floatify_android.data.yandex_ocr.dto
+package com.glebalekseevjk.floatify_android.data.yandex_public.yandex_ocr.dto
 
 import com.google.gson.annotations.SerializedName
 

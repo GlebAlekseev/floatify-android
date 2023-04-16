@@ -1,7 +1,7 @@
-package com.glebalekseevjk.floatify_android.data.yandex_translate
+package com.glebalekseevjk.floatify_android.data.yandex_public.yandex_translate
 
-import com.glebalekseevjk.floatify_android.data.yandex_translate.dto.YandexTranslateResponse
-import com.glebalekseevjk.floatify_android.data.yandex_translate.exception.ExpiredSessionException
+import com.glebalekseevjk.floatify_android.data.yandex_public.yandex_translate.dto.YandexTranslateResponse
+import com.glebalekseevjk.floatify_android.data.yandex_public.yandex_translate.exception.ExpiredSessionException
 import com.glebalekseevjk.floatify_android.domain.entity.Resource
 import com.glebalekseevjk.floatify_android.domain.entity.translate.TranslateLang
 import com.glebalekseevjk.floatify_android.domain.interactor.TemporaryUseCase

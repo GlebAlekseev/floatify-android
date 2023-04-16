@@ -2,7 +2,7 @@ package com.glebalekseevjk.floatify_android.di.module
 
 import android.content.Context
 import com.glebalekseevjk.floatify_android.R
-import com.glebalekseevjk.floatify_android.data.yandex_translate.YandexTranslateService
+import com.glebalekseevjk.floatify_android.data.yandex_public.yandex_translate.YandexTranslateService
 import com.glebalekseevjk.premierleaguefixtures.di.scope.AppComponentScope
 import dagger.Module
 import dagger.Provides
