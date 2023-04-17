@@ -9,7 +9,6 @@ import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.glebalekseevjk.floatify_android.R
 import com.glebalekseevjk.floatify_android.appComponent
@@ -34,14 +33,14 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var translateUseCase: TranslateUseCase
 
-    private lateinit var binding: ActivityMainBinding;
+//    private lateinit var binding: ActivityMainBinding;
 
     lateinit var job: Job
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.createMainActivitySubcomponent().inject(this)
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        setContentView(binding.root)
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//        setContentView(binding.root)
 
         ActivityCompat.requestPermissions(
             this,
@@ -50,39 +49,39 @@ class MainActivity : AppCompatActivity() {
 
         var counterErrors = 0
         var counterSuccess = 0
-        binding.testName.setOnClickListener {
-
-            job = lifecycleScope.launch {
-                for (i in 1..100) {
-                    binding.testName.text = "ТЕСТ $i"
-                    val file = takeScreenshot()
-                    val result = ocrUseCase.recognizeText(file, OCRLang.ANY)
-                    val resultTranslate = when (result) {
-                        is Resource.Failure -> {
-                            result
-                        }
-                        is Resource.Success -> {
-                            translateUseCase.translateText(
-                                listOf(result.data),
-                                TranslateLang.EN,
-                                TranslateLang.RU
-                            )
-                        }
-                    }
-
-                    when (resultTranslate) {
-                        is Resource.Failure<*> -> println("Итерация $i << ошибка").also { counterErrors++ }
-                        is Resource.Success<*> -> println("Итерация $i >> успех: ${result}").also { counterSuccess++ }
-                    }
-                    delay(5000)
-                }
-                println("\t\t$counterErrors ошибочных\n\t\t$counterSuccess успешных\n\t\tВсего итераций: ${counterErrors + counterSuccess}\n")
-            }
-        }
-        binding.stop.setOnClickListener {
-            job.cancel()
-            println("\t\t$counterErrors ошибочных\n\t\t$counterSuccess успешных\n\t\tВсего итераций: ${counterErrors + counterSuccess}\n")
-        }
+//        binding.testName.setOnClickListener {
+//
+//            job = lifecycleScope.launch {
+//                for (i in 1..100) {
+//                    binding.testName.text = "ТЕСТ $i"
+//                    val file = takeScreenshot()
+//                    val result = ocrUseCase.recognizeText(file, OCRLang.ANY)
+//                    val resultTranslate = when (result) {
+//                        is Resource.Failure -> {
+//                            result
+//                        }
+//                        is Resource.Success -> {
+//                            translateUseCase.translateText(
+//                                listOf(result.data),
+//                                TranslateLang.EN,
+//                                TranslateLang.RU
+//                            )
+//                        }
+//                    }
+//
+//                    when (resultTranslate) {
+//                        is Resource.Failure<*> -> println("Итерация $i << ошибка").also { counterErrors++ }
+//                        is Resource.Success<*> -> println("Итерация $i >> успех: ${result}").also { counterSuccess++ }
+//                    }
+//                    delay(5000)
+//                }
+//                println("\t\t$counterErrors ошибочных\n\t\t$counterSuccess успешных\n\t\tВсего итераций: ${counterErrors + counterSuccess}\n")
+//            }
+//        }
+//        binding.stop.setOnClickListener {
+//            job.cancel()
+//            println("\t\t$counterErrors ошибочных\n\t\t$counterSuccess успешных\n\t\tВсего итераций: ${counterErrors + counterSuccess}\n")
+//        }
 
 
     }
