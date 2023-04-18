@@ -8,22 +8,22 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 //import androidx.databinding.DataBindingUtil
-import com.glebalekseevjk.floatify_android.R
+//import com.glebalekseevjk.floatify_android.R
 import com.glebalekseevjk.floatify_android.appComponent
-import com.glebalekseevjk.floatify_android.databinding.ActivityYandexSessionWebViewBinding
+//import com.glebalekseevjk.floatify_android.databinding.ActivityYandexSessionWebViewBinding
 import com.glebalekseevjk.floatify_android.domain.interactor.YandexSessionUseCase
 import javax.inject.Inject
 
 class YandexSessionWebViewActivity : AppCompatActivity() {
 //    private lateinit var binding: ActivityYandexSessionWebViewBinding
 
-    @Inject
-    lateinit var yandexSessionUseCase: YandexSessionUseCase
+//    @Inject
+//    lateinit var yandexSessionUseCase: YandexSessionUseCase
 
     private var isGood = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        appComponent.createYandexSessionWebViewActivitySubcomponent().inject(this)
+//        appComponent.createYandexSessionWebViewActivitySubcomponent().inject(this)
         super.onCreate(savedInstanceState)
 //        binding = DataBindingUtil.setContentView(
 //            this,

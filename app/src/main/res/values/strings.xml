@@ -4,4 +4,7 @@
     <string name="yandex_session_url">https://translate.yandex.ru/ocr</string>
     <string name="yandex_ocr_url">https://translate.yandex.net/</string>
     <string name="yandex_translate_url">https://translate.yandex.net/</string>
+
+    <string name="paddle_model_path">models/ch_PP-OCRv2</string>
+    <string name="paddle_label_path">labels/ppocr_keys_v1.txt</string>
 </resources>
