@@ -6,12 +6,16 @@ import com.glebalekseevjk.floatify_android.di.AppComponent
 import com.glebalekseevjk.floatify_android.di.DaggerAppComponent
 
 class MainApplication : Application() {
+    companion object {
+        lateinit var instance: Application
+    }
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create(this)
     }
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         appComponent.injectMainApplication(this)
     }
 }

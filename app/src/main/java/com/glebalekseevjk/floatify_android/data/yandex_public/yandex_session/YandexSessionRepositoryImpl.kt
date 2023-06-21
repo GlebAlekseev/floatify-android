@@ -5,7 +5,7 @@ import android.content.Intent
 import android.webkit.CookieManager
 import com.glebalekseevjk.floatify_android.R
 import com.glebalekseevjk.floatify_android.domain.repository.YandexSessionRepository
-import com.glebalekseevjk.floatify_android.presentation.YandexSessionWebViewActivity
+import com.glebalekseevjk.floatify_android.presentation.activity.YandexSessionWebViewActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
