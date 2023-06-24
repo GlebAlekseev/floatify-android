@@ -26,28 +26,6 @@ class MainBar(context: Context, val viewModel: MainBarViewModel) : MovableFloati
         get() = FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_NOT_TOUCHABLE
 
     private val binding: FloatingMainBarBinding = FloatingMainBarBinding.bind(rootLayout)
-//    private val viewModel: MainBarViewModel by lazy { MainBarViewModel(viewScope) }
-
-//    private fun startImage(){
-////        binding.start.setOnClickListener {
-////            stopImage()
-////        }
-//        viewModel.setImage(
-//            { bitmap ->
-//                binding.imageView.setImageBitmap(bitmap)
-//            },
-//            context
-//        )
-//        binding.imageView.visibility = View.VISIBLE
-//    }
-
-//    private fun stopImage(){
-////        binding.start.text = "Старт"
-////        binding.start.setOnClickListener {
-////            startImage()
-////        }
-//        binding.imageView.visibility = View.INVISIBLE
-//    }
 
     init {
         viewScope.launch {
@@ -61,37 +39,5 @@ class MainBar(context: Context, val viewModel: MainBarViewModel) : MovableFloati
                 }
             }
         }
-
-//        viewScope.launch {
-////            viewModel.state.collect{
-////                binding.layoutLl.setBackgroundColor(it)
-////            }
-//        }
-
-//        binding.composeView.apply {
-////            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-//            setContent {
-//                // In Compose world
-//                MaterialTheme {
-//                    Text("Hello Compose!")
-//                }
-//            }
-////            setViewTreeLifecycleOwner()
-////            setViewTreeSavedStateRegistryOwner(myLifecycleOwner)
-//        }
     }
-//    override val enableDeviceDirectionTracker: Boolean
-//        get() = true
-//
-//    override val moveToEdgeAfterMoved: Boolean
-//        get() = true
-
-
-//    override fun onAttachedToScreen() {
-//        super.onAttachedToScreen()
-//    }
-//
-//    override fun onDetachedFromScreen() {
-//        super.onDetachedFromScreen()
-//    }
 }

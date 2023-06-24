@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 
 class ViewHolderService : Service() {
-
+    var floatingStateHolder: FloatingStateHolder? = FloatingStateHolder()
     companion object {
         private const val ACTION_SHOW_VIEWS = "ACTION_SHOW_VIEWS"
         private const val ACTION_HIDE_VIEWS = "ACTION_HIDE_VIEWS"
@@ -58,7 +58,7 @@ class ViewHolderService : Service() {
     override fun onCreate() {
         super.onCreate()
         floatingStateListenerJob = CoroutineScope(Dispatchers.Main).launch {
-            FloatingStateHolder.showingStateChangedFlow.collect { startForeground() }
+            floatingStateHolder?.showingStateChangedFlow?.collect { startForeground() }
         }
     }
     override fun onDestroy() {
@@ -84,6 +84,7 @@ class ViewHolderService : Service() {
             ACTION_EXIT -> {
                 exit()
                 stopForeground()
+                floatingStateHolder = null
                 START_NOT_STICKY
             }
 
@@ -104,13 +105,13 @@ class ViewHolderService : Service() {
     }
 
     private fun hideViews() {
-//        FloatingStateManager.detachAllViews()
+        floatingStateHolder?.detachAllViews()
     }
 
     private fun showViews() {
         if (ScreenExtractor.isGranted) {
 
-            FloatingStateHolder.showMainBar()
+            floatingStateHolder?.showMainBar()
         } else {
             startActivity(MainActivity.getLaunchIntent(this))
         }
@@ -138,16 +139,10 @@ class ViewHolderService : Service() {
             .setColor(ContextCompat.getColor(this, R.color.purple_500))
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_background))
-            .setTicker(getString(R.string.app_name))
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(
-                if (clickToShow) getString(R.string.msg_click_to_show_the_floating_bar)
-                else getString(R.string.msg_click_to_hide_the_floating_bar)
-            )
             .setAutoCancel(false)
 
         val intent = Intent(this, ViewHolderService::class.java).apply {
-            action = if (clickToShow) ACTION_SHOW_VIEWS else ACTION_HIDE_VIEWS
+            action = ACTION_EXIT
         }
         val pendingIntent =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)

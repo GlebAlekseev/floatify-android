@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Button(onClick = ::startOverlay) {
-                            Text(text = "Старт")
+                            Text(text = "Запустить")
                         }
                     }
                 }
@@ -48,11 +48,11 @@ class MainActivity : ComponentActivity() {
     private fun startOverlay() {
         val granted = PermissionUtil.canDrawOverlays(this@MainActivity)
         if (granted) {
-//            if (ScreenExtractor.isGranted) {
-//                startService()
-//            } else {
+            if (ScreenExtractor.isGranted) {
+                startService()
+            } else {
                 requestMediaProjection()
-//            }
+            }
         } else {
             requestPermissionDrawOverlays()
         }

@@ -7,10 +7,14 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Point
+import android.graphics.Rect
+import android.graphics.RectF
 import androidx.compose.ui.geometry.Offset
 import com.baidu.paddle.lite.demo.ocr.OCRPredictorNative
 import com.glebalekseevjk.floatify_android.R
+import com.glebalekseevjk.floatify_android.data.free_translate.FreeTranslateRetrofit
 import com.glebalekseevjk.floatify_android.utils.copyDirectoryFromAssets
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.InputStream
 
@@ -21,7 +25,7 @@ class OCRPredictor(
     private var inputImage: Bitmap? = null
     private var outputImage: Bitmap? = null
     private val wordLabels = mutableListOf<String>()
-    private var detLongSize: Int = 1444
+    private var detLongSize: Int = 960
     private var warmupIterNum: Int = 1
     private var _isLoaded = false
     private var isLoaded: Boolean
@@ -42,11 +46,8 @@ class OCRPredictor(
 
         val config = OCRPredictorNative.Companion.Config.DEFAULT.copy(
             detectionModelPath = realPath + File.separator + "det_db.nb",
-//            detectionModelPath = realPath + File.separator + "det_db.nb",
             recognitionModelPath = realPath + File.separator + "rec_crnn.nb",
-//            recognitionModelPath = realPath + File.separator + "rec_crnn.nb",
             classificationModelPath = realPath + File.separator + "cls.nb",
-//            classificationModelPath = realPath + File.separator + "cls.nb",
         )
 
         paddlePredictor = OCRPredictorNative(config)
@@ -79,24 +80,24 @@ class OCRPredictor(
         if (inputImage == null || !isLoaded) throw RuntimeException("run isLoaded=$isLoaded inputImage=$inputImage")
 
         // Warm up
-//        for (i in 0 until warmupIterNum) {
-//            paddlePredictor!!.runImage(
-//                inputImage,
-//                detLongSize,
-//                if (runDetection) 1 else 0,
-//                if (runClassification) 1 else 0,
-//                if (runRecognition) 1 else 0
-//            )
-//        }
-//        warmupIterNum = 0
+        for (i in 0 until warmupIterNum) {
+            paddlePredictor!!.runImage(
+                inputImage,
+                detLongSize,
+                if (runDetection) 1 else 0,
+                if (runClassification) 1 else 0,
+                if (runRecognition) 1 else 0
+            )
+        }
+        warmupIterNum = 0
 
         val results =
             paddlePredictor!!.runImage(
                 inputImage,
                 detLongSize,
                 if (runDetection) 1 else 0,
-                if (runClassification) 0 else 0,
-                if (runRecognition) 0 else 0
+                if (runClassification) 1 else 0,
+                if (runRecognition) 1 else 0
             )
         return postProcess(results)
     }
@@ -124,32 +125,6 @@ class OCRPredictor(
         return results
     }
 
-    private fun drawResults(results: List<OCRResultModel>) {
-        outputImage = inputImage
-        val canvas = Canvas(outputImage!!)
-        val paintFillAlpha = Paint()
-        paintFillAlpha.style = Paint.Style.FILL
-        paintFillAlpha.color = Color.parseColor("#3B85F5")
-        paintFillAlpha.alpha = 50
-        val paint = Paint()
-        paint.color = Color.parseColor("#3B85F5")
-        paint.strokeWidth = 5f
-        paint.style = Paint.Style.STROKE
-        for (result in results) {
-            val path = Path()
-            val points: List<Point> = result.points
-            if (points.isEmpty()) {
-                continue
-            }
-            path.moveTo(points[0].x.toFloat(), points[0].y.toFloat())
-            for (i in points.indices.reversed()) {
-                val p = points[i]
-                path.lineTo(p.x.toFloat(), p.y.toFloat())
-            }
-            canvas.drawPath(path, paint)
-            canvas.drawPath(path, paintFillAlpha)
-        }
-    }
     private fun drawResultsModern(results: List<OCRResultModel>) {
         outputImage = inputImage
         val canvas = Canvas(outputImage!!)
@@ -161,7 +136,16 @@ class OCRPredictor(
         paint.color = Color.parseColor("#3B85F5")
         paint.strokeWidth = 5f
         paint.style = Paint.Style.STROKE
-        for (result in results) {
+
+        val fullText = results.map { it.label }.joinToString("\n###\n")
+        val response = runBlocking {
+            FreeTranslateRetrofit.translationApi.translateText("ru", fullText)
+        }
+        val translatedTextArray = (if (response.isSuccessful) response.body()?.destinationText ?: fullText else fullText)
+            .split("\n###\n")
+
+
+        for ((index, result) in results.withIndex()) {
             val path = Path()
             val points: List<Point> = result.points
             if (points.isEmpty()) {
@@ -175,11 +159,30 @@ class OCRPredictor(
             canvas.drawPath(path, paint)
             canvas.drawPath(path, paintFillAlpha)
 
-            val paint2 = Paint()
-            paint2.color = Color.WHITE
-            paint2.textSize = 52f
-            canvas.drawText(result.label, points[0].x.toFloat()+25f,points[1].y.toFloat()+40f, paint2)
-//            canvas.drawTextOnPath(result.label, path, points[0].x.toFloat(),points[1].y.toFloat(), paint2)
+            val text = translatedTextArray[index]
+
+            val paint2 = Paint().apply {
+                textSize = 100f
+                textAlign = Paint.Align.LEFT
+                color = Color.WHITE
+            }
+
+            val bounds = RectF()
+            path.computeBounds(bounds, true)
+
+            val targetWidth = bounds.width()
+            val targetHeight = bounds.height()
+            val textBounds = Rect()
+            while (paint2.measureText(text) > targetWidth*0.9 || textBounds.height() > targetHeight*0.9) {
+                paint2.textSize -= 1f
+                paint2.getTextBounds(text, 0, text.length, textBounds)
+            }
+
+            val x = bounds.left + (bounds.width() - textBounds.width()) / 2
+            val y = (bounds.bottom + bounds.top) / 2 + textBounds.height() / 2
+
+            println(translatedTextArray[index])
+            canvas.drawText(text, x, y, paint2)
         }
     }
 }

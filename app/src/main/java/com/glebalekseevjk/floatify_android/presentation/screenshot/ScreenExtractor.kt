@@ -122,7 +122,6 @@ object ScreenExtractor {
                     "screen-mirror",
                     width, height, screenDensityDpi,
                     DisplayManager. VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
-//                    DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
                     imageReader.surface, null, null
                 )
 

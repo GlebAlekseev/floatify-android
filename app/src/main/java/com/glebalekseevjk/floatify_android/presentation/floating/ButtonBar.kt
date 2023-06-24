@@ -31,10 +31,9 @@ class ButtonBar(context: Context, val viewModel: MainBarViewModel) : MovableFloa
         get() = WRAP_CONTENT
 
     private val binding: FloatingMainBarButtonBinding = FloatingMainBarButtonBinding.bind(rootLayout)
-//    private val viewModel: MainBarViewModel by lazy { MainBarViewModel(viewScope) }
 
     private fun startImage(){
-        binding.start.text = "Стоп"
+        binding.start.text = "Закрыть"
         binding.start.setOnClickListener {
             stopImage()
         }
@@ -44,7 +43,7 @@ class ButtonBar(context: Context, val viewModel: MainBarViewModel) : MovableFloa
     }
 
     private fun stopImage(){
-        binding.start.text = "Старт"
+        binding.start.text = "Перевести"
         binding.start.setOnClickListener {
             startImage()
         }
@@ -54,38 +53,10 @@ class ButtonBar(context: Context, val viewModel: MainBarViewModel) : MovableFloa
     }
 
     init {
-//        viewScope.launch {
-////            viewModel.state.collect{
-////                binding.layoutLl.setBackgroundColor(it)
-////            }
-//        }
+
         binding.start.setOnClickListener {
             startImage()
         }
-//        binding.composeView.apply {
-////            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-//            setContent {
-//                // In Compose world
-//                MaterialTheme {
-//                    Text("Hello Compose!")
-//                }
-//            }
-////            setViewTreeLifecycleOwner()
-////            setViewTreeSavedStateRegistryOwner(myLifecycleOwner)
-//        }
+
     }
-//    override val enableDeviceDirectionTracker: Boolean
-//        get() = true
-//
-//    override val moveToEdgeAfterMoved: Boolean
-//        get() = true
-
-
-//    override fun onAttachedToScreen() {
-//        super.onAttachedToScreen()
-//    }
-//
-//    override fun onDetachedFromScreen() {
-//        super.onDetachedFromScreen()
-//    }
 }
